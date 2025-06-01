@@ -85,7 +85,8 @@
         margin-right: auto;
       }
 
-      input[type="number"] {
+      input[type="number"],
+      input[type="text"] {
         width: 100%;
         padding: 10px;
         font-size: 16px;
@@ -139,24 +140,29 @@
       <button class="masa-btn" id="masa1" onclick="masaSec('masa1')">
         <div class="label">Masa 1</div>
         <div class="numara"></div>
+        <div class="text"></div>
       </button>
       <button class="masa-btn" id="masa2" onclick="masaSec('masa2')">
         <div class="label">Masa 2</div>
         <div class="numara"></div>
+        <div class="text"></div>
       </button>
       <button class="masa-btn" id="masa3" onclick="masaSec('masa3')">
         <div class="label">Masa 3</div>
         <div class="numara"></div>
+        <div class="text"></div>
       </button>
       <button class="masa-btn" id="masa4" onclick="masaSec('masa4')">
         <div class="label">Masa 4</div>
         <div class="numara"></div>
+        <div class="text"></div>
       </button>
     </div>
 
     <div id="form">
       <label id="formLabel"></label><br />
       <input type="number" id="kurbanNo" placeholder="Kurban numarası girin" />
+      <input type="text" id="kurbanName" placeholder="Kurban sahibi girin" />
       <button class="save-btn" onclick="kaydet()">Kaydet</button>
     </div>
 
@@ -191,13 +197,18 @@
           const id = `masa${i}`;
           const buton = document.getElementById(id);
           const span = buton.querySelector(".numara");
+          const spanText = buton.querySelector(".text");
 
           // Firebase üzerinden veri çek
           get(child(ref(db), `masalar/${id}`)).then((snapshot) => {
             buton.classList.remove("masa-dolu", "masa-aktif");
             if (snapshot.exists()) {
+              const veriler = snapshot.val();
+
               buton.classList.add("masa-dolu");
-              span.textContent = `Kurban: ${snapshot.val()}`;
+              span.textContent = `Kurban: ${veriler.numara}`;
+              spanText.textContent =
+                veriler.name || "Kurban sahibi belirtilmemiş";
             } else {
               span.textContent = "Boş";
             }
@@ -215,17 +226,25 @@
         const masaNo = id.replace("masa", "");
         document.getElementById(
           "formLabel"
-        ).textContent = `Masa ${masaNo} için kurban numarası girin:`;
+        ).textContent = `Masa ${masaNo} için kurban bilgileri girin:`;
         document.getElementById("kurbanNo").value = "";
+        document.getElementById("kurbanName").value = "";
         document.getElementById("form").style.display = "block";
         document.getElementById("form").scrollIntoView({ behavior: "smooth" });
       };
 
       window.kaydet = function () {
         const numara = document.getElementById("kurbanNo").value;
+        const kurbanName = document.getElementById("kurbanName").value;
+
         if (seciliMasa && numara) {
-          set(ref(db, `masalar/${seciliMasa}`), numara).then(() => {
-            alert("Kurban numarası kaydedildi!");
+          const veriler = {
+            numara: numara,
+            name: kurbanName,
+          };
+
+          set(ref(db, `masalar/${seciliMasa}`), veriler).then(() => {
+            alert("Kurban kaydedildi!");
             guncelleMasalar();
             document.getElementById("form").style.display = "none";
           });

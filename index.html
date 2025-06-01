@@ -48,7 +48,7 @@
       }
 
       .durum {
-        font-size: 50px;
+        font-size: 60px;
         font-weight: bold;
         padding: 20px 30px;
         border-radius: 16px;
@@ -88,19 +88,19 @@
   <body>
     <div class="grid-container">
       <div class="masa-kutu">
-        <h2>Masa 1</h2>
+        <h2>Masa 1 - Kurban Parçalama</h2>
         <div id="durum1" class="durum">Yükleniyor...</div>
       </div>
       <div class="masa-kutu">
-        <h2>Masa 2</h2>
+        <h2>Masa 2 - Kurban Parçalama</h2>
         <div id="durum2" class="durum">Yükleniyor...</div>
       </div>
       <div class="masa-kutu">
-        <h2>Masa 3</h2>
+        <h2>Masa 3 - Kurban Parçalama</h2>
         <div id="durum3" class="durum">Yükleniyor...</div>
       </div>
       <div class="masa-kutu">
-        <h2>Masa 4</h2>
+        <h2>Masa 4 - Kurban Parçalama</h2>
         <div id="durum4" class="durum">Yükleniyor...</div>
       </div>
     </div>
@@ -133,7 +133,9 @@
 
         onValue(masaRef, (snapshot) => {
           if (snapshot.exists()) {
-            elem.textContent = `Kurban No: ${snapshot.val()}`;
+            elem.innerHTML = `Kurban No: ${snapshot.val().numara}<br>${
+              snapshot.val().name || "Belirtilmemiş"
+            }<br> ve ortakları`;
             elem.classList.remove("bos");
             elem.classList.add("dolu");
           } else {
