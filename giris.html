@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kurban Girişi</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f4f8;
+        text-align: center;
+        padding: 30px;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+      }
+
+      .masa-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .masa-btn {
+        width: 160px;
+        height: 160px;
+        border-radius: 12px;
+        border: 2px solid #ccc;
+        font-size: 18px;
+        font-weight: bold;
+        background-color: #fff;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .masa-btn:hover {
+        border-color: #007bff;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+      }
+
+      .masa-btn .label {
+        position: absolute;
+        top: 10px;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.7);
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+
+      .masa-btn .numara {
+        margin-top: 40px;
+        font-size: 16px;
+      }
+
+      .masa-dolu {
+        background-color: #d4edda;
+        border-color: #28a745;
+        color: #155724;
+      }
+
+      .masa-aktif {
+        background-color: #cfe2ff;
+        border-color: #0d6efd;
+        color: #084298;
+      }
+
+      #form {
+        margin-top: 30px;
+        display: none;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      button.save-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button.save-btn:hover {
+        background-color: #0056b3;
+      }
+
+      @media (max-width: 600px) {
+        .masa-btn {
+          width: 45%;
+          height: 140px;
+          font-size: 16px;
+        }
+
+        .masa-btn .label {
+          font-size: 14px;
+        }
+
+        .masa-btn .numara {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .masa-btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Kurban Masası Seçimi</h2>
+
+    <div class="masa-container">
+      <button class="masa-btn" id="masa1" onclick="masaSec('masa1')">
+        <div class="label">Masa 1</div>
+        <div class="numara"></div>
+      </button>
+      <button class="masa-btn" id="masa2" onclick="masaSec('masa2')">
+        <div class="label">Masa 2</div>
+        <div class="numara"></div>
+      </button>
+      <button class="masa-btn" id="masa3" onclick="masaSec('masa3')">
+        <div class="label">Masa 3</div>
+        <div class="numara"></div>
+      </button>
+      <button class="masa-btn" id="masa4" onclick="masaSec('masa4')">
+        <div class="label">Masa 4</div>
+        <div class="numara"></div>
+      </button>
+    </div>
+
+    <div id="form">
+      <label id="formLabel"></label><br />
+      <input type="number" id="kurbanNo" placeholder="Kurban numarası girin" />
+      <button class="save-btn" onclick="kaydet()">Kaydet</button>
+    </div>
+
+    <script>
+      let seciliMasa = "";
+
+      function guncelleMasalar() {
+        for (let i = 1; i <= 4; i++) {
+          const id = `masa${i}`;
+          const buton = document.getElementById(id);
+          const numara = localStorage.getItem(id);
+          const span = buton.querySelector(".numara");
+
+          buton.classList.remove("masa-dolu", "masa-aktif");
+
+          if (numara) {
+            buton.classList.add("masa-dolu");
+            span.textContent = `Kurban: ${numara}`;
+          } else {
+            span.textContent = "Boş";
+          }
+        }
+      }
+
+      function masaSec(id) {
+        seciliMasa = id;
+
+        // Aktif masa vurgusu
+        for (let i = 1; i <= 4; i++) {
+          const btn = document.getElementById(`masa${i}`);
+          btn.classList.remove("masa-aktif");
+        }
+        const aktifBtn = document.getElementById(id);
+        aktifBtn.classList.add("masa-aktif");
+
+        const masaNo = id.replace("masa", "");
+        document.getElementById(
+          "formLabel"
+        ).textContent = `Masa ${masaNo} için kurban numarası girin:`;
+        document.getElementById("kurbanNo").value = "";
+        document.getElementById("form").style.display = "block";
+
+        document.getElementById("form").scrollIntoView({ behavior: "smooth" });
+      }
+
+      function kaydet() {
+        const numara = document.getElementById("kurbanNo").value;
+        if (seciliMasa && numara) {
+          localStorage.setItem(seciliMasa, numara);
+          alert("Kaydedildi!");
+          document.getElementById("form").style.display = "none";
+          seciliMasa = "";
+          guncelleMasalar();
+        }
+      }
+
+      // Sayfa ilk açıldığında masaları güncelle
+      guncelleMasalar();
+    </script>
+  </body>
+</html>

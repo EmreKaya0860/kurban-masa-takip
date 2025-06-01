@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kurban Masaları Listesi</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f0f2f5;
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        height: 100vh;
+      }
+
+      .masa-kutu {
+        border: 1px solid #ccc;
+        margin: 0;
+        padding: 20px;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        position: relative;
+      }
+
+      .masa-kutu h2 {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        margin: 0;
+        font-size: 40px;
+        color: #333;
+      }
+
+      .durum {
+        font-size: 50px;
+        font-weight: bold;
+        padding: 20px 30px;
+        border-radius: 16px;
+        color: white;
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      .dolu {
+        background-color: #28a745;
+      }
+
+      .bos {
+        background-color: #dc3545;
+      }
+
+      @media (max-width: 768px) {
+        .grid-container {
+          grid-template-columns: 1fr;
+          grid-template-rows: repeat(4, 1fr);
+        }
+
+        .masa-kutu {
+          font-size: 20px;
+        }
+
+        .durum {
+          font-size: 26px;
+        }
+
+        .masa-kutu h2 {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container">
+      <div class="masa-kutu">
+        <h2>Masa 1</h2>
+        <div id="durum1" class="durum">Yükleniyor...</div>
+      </div>
+      <div class="masa-kutu">
+        <h2>Masa 2</h2>
+        <div id="durum2" class="durum">Yükleniyor...</div>
+      </div>
+      <div class="masa-kutu">
+        <h2>Masa 3</h2>
+        <div id="durum3" class="durum">Yükleniyor...</div>
+      </div>
+      <div class="masa-kutu">
+        <h2>Masa 4</h2>
+        <div id="durum4" class="durum">Yükleniyor...</div>
+      </div>
+    </div>
+
+    <script>
+      function guncelleListe() {
+        for (let i = 1; i <= 4; i++) {
+          const key = `masa${i}`;
+          const data = localStorage.getItem(key);
+          const elem = document.getElementById(`durum${i}`);
+          if (data) {
+            elem.textContent = `Kurban No: ${data}`;
+            elem.classList.remove("bos");
+            elem.classList.add("dolu");
+          } else {
+            elem.textContent = `BOŞ`;
+            elem.classList.remove("dolu");
+            elem.classList.add("bos");
+          }
+        }
+      }
+
+      guncelleListe();
+
+      setInterval(guncelleListe, 10000);
+    </script>
+  </body>
+</html>
