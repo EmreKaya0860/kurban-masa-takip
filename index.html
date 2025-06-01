@@ -104,15 +104,36 @@
         <div id="durum4" class="durum">Yükleniyor...</div>
       </div>
     </div>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        get,
+        child,
+      } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 
-    <script>
-      function guncelleListe() {
+      const firebaseConfig = {
+        apiKey: "AIzaSyBFcXWv1STS4grITKMci2KY5Rzl7iXGX3c",
+        authDomain: "kurban-takip-dd87b.firebaseapp.com",
+        databaseURL:
+          "https://kurban-takip-dd87b-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kurban-takip-dd87b",
+        storageBucket: "kurban-takip-dd87b.appspot.com",
+        messagingSenderId: "1073406914660",
+        appId: "1:1073406914660:web:11be3cdf9a7c3a74aa2f71",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      async function guncelleListe() {
         for (let i = 1; i <= 4; i++) {
           const key = `masa${i}`;
-          const data = localStorage.getItem(key);
+          const snapshot = await get(child(ref(db), `masalar/${key}`));
           const elem = document.getElementById(`durum${i}`);
-          if (data) {
-            elem.textContent = `Kurban No: ${data}`;
+          if (snapshot.exists()) {
+            elem.textContent = `Kurban No: ${snapshot.val()}`;
             elem.classList.remove("bos");
             elem.classList.add("dolu");
           } else {
@@ -124,7 +145,6 @@
       }
 
       guncelleListe();
-
       setInterval(guncelleListe, 10000);
     </script>
   </body>
