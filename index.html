@@ -135,7 +135,7 @@
           if (snapshot.exists()) {
             elem.innerHTML = `Kurban No: ${snapshot.val().numara}<br>${
               snapshot.val().name || "Belirtilmemiş"
-            }<br> ve ortakları`;
+            }`;
             elem.classList.remove("bos");
             elem.classList.add("dolu");
           } else {
