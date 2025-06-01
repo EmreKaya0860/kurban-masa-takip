@@ -225,7 +225,7 @@
         const numara = document.getElementById("kurbanNo").value;
         if (seciliMasa && numara) {
           set(ref(db, `masalar/${seciliMasa}`), numara).then(() => {
-            alert("Firebase'e kaydedildi!");
+            alert("Kurban numarası kaydedildi!");
             guncelleMasalar();
             document.getElementById("form").style.display = "none";
           });

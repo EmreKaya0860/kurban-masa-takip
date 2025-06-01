@@ -109,8 +109,7 @@
       import {
         getDatabase,
         ref,
-        get,
-        child,
+        onValue,
       } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 
       const firebaseConfig = {
@@ -127,11 +126,12 @@
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
 
-      async function guncelleListe() {
-        for (let i = 1; i <= 4; i++) {
-          const key = `masa${i}`;
-          const snapshot = await get(child(ref(db), `masalar/${key}`));
-          const elem = document.getElementById(`durum${i}`);
+      for (let i = 1; i <= 4; i++) {
+        const key = `masa${i}`;
+        const elem = document.getElementById(`durum${i}`);
+        const masaRef = ref(db, `masalar/${key}`);
+
+        onValue(masaRef, (snapshot) => {
           if (snapshot.exists()) {
             elem.textContent = `Kurban No: ${snapshot.val()}`;
             elem.classList.remove("bos");
@@ -141,11 +141,8 @@
             elem.classList.remove("dolu");
             elem.classList.add("bos");
           }
-        }
+        });
       }
-
-      guncelleListe();
-      setInterval(guncelleListe, 10000);
     </script>
   </body>
 </html>
