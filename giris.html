@@ -24,11 +24,11 @@
       }
 
       .masa-btn {
-        width: 160px;
+        width: 200px;
         height: 160px;
         border-radius: 12px;
         border: 2px solid #ccc;
-        font-size: 18px;
+        font-size: 12px;
         font-weight: bold;
         background-color: #fff;
         color: #333;
@@ -39,6 +39,7 @@
         justify-content: center;
         flex-direction: column;
         position: relative;
+        gap: 10px;
       }
 
       .masa-btn:hover {
@@ -132,6 +133,7 @@
         }
       }
     </style>
+    <script src="ownerList.js"></script>
   </head>
   <body>
     <h2>Kurban Masası Seçimi</h2>
@@ -162,7 +164,7 @@
     <div id="form">
       <label id="formLabel"></label><br />
       <input type="number" id="kurbanNo" placeholder="Kurban numarası girin" />
-      <input type="text" id="kurbanName" placeholder="Kurban sahibi girin" />
+      <input type="hidden" id="kurbanName" placeholder="Kurban sahibi girin" />
       <button class="save-btn" onclick="kaydet()">Kaydet</button>
     </div>
 
@@ -235,7 +237,7 @@
 
       window.kaydet = function () {
         const numara = document.getElementById("kurbanNo").value;
-        const kurbanName = document.getElementById("kurbanName").value;
+        const kurbanName = ownerList[numara].name || "Belirtilmemiş";
 
         if (seciliMasa && numara) {
           const veriler = {
